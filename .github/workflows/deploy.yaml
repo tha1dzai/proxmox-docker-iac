@@ -13,6 +13,7 @@ jobs:
         config:
           - { host: '192.168.2.121', stack_name: 'uptime-kuma' }
           - { host: '192.168.2.121', stack_name: 'watchtower' }
+          - { host: '192.168.2.121', stack_name: 'n8n-cloudflared' }
 
     env:
       DOCKER_HOST: tcp://${{ matrix.config.host }}:2375
@@ -29,6 +30,11 @@ jobs:
           docker context \
             create ${{ env.DOCKER_CONTEXT_NAME }} \
             --docker host=${{ env.DOCKER_HOST }}
+
+      - name: Inject secrets (n8n-cloudflared)
+        if: env.DOCKER_PROJECT_NAME == 'n8n-cloudflared'
+        run: |
+          echo "${{ secrets.N8N_SECRETS }}" >> $GITHUB_ENV
 
       - name: Deploy with Docker Compose
         run: |
