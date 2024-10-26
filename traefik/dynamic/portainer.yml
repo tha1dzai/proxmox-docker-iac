@@ -1,0 +1,16 @@
+http:
+  routers:
+    portainer:
+      rule: "Host(`portainer.lab.ehcan.me`)"
+      entryPoints:
+        - websecure
+      service: portainer
+  services:
+    portainer:
+      loadBalancer:
+        servers:
+          - url: "https://192.168.2.121:9443"
+        serversTransport: portainerTransport
+  serversTransports:
+    portainerTransport:
+      insecureSkipVerify: true
