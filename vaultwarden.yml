@@ -1,0 +1,56 @@
+networks:
+  vaultwarden-network:
+    name: vaultwarden-network
+
+volumes:
+  vaultwarden:
+
+services:
+  vaultwarden:
+    container_name: vaultwarden
+    hostname: vaultwarden
+    image: vaultwarden/server:latest
+    networks:
+      - vaultwarden-network
+    volumes:
+      - vaultwarden:/data
+    environment:
+      TZ: Europe/Berlin
+      WEBSOCKET_ENABLED: true
+      # todo: turn this off later
+      SIGNUPS_ALLOWED: true
+      DATABASE_URL: data/db.sqlite3
+      ADMIN_TOKEN: ${ADMIN_TOKEN}
+      DOMAIN: https://passwords.ehcan.me
+    restart: unless-stopped
+
+  cloudflared:
+    container_name: vaultwarden-cloudflared
+    image: cloudflare/cloudflared:latest
+    networks:
+      - vaultwarden-network
+    environment:
+      TZ: Europe/Berlin
+    command:
+      [
+        "tunnel",
+        "--no-autoupdate",
+        "run",
+        "--token",
+        "${CLOUDFLARED_TOKEN}"
+      ]
+    restart: unless-stopped
+
+  s3sync-backblaze:
+    container_name: vaultwarden-s3sync-backblaze
+    image: minio/mc:latest
+    volumes:
+      - vaultwarden:/vaultwarden
+    environment:
+      MC_HOST_backblaze: "https://${VAULTWARDEN_S3_ACCESS_KEY}:${VAULTWARDEN_S3_SECRET_KEY}@${VAULTWARDEN_S3_URL}"
+    entrypoint: [
+      "mc", "mirror",
+      "--watch",
+      "--overwrite",
+      "/vaultwarden", "backblaze/${VAULTWARDEN_S3_BUCKET_NAME}"
+    ]
