@@ -26,7 +26,7 @@ services:
       - n8n_data:/home/node/.n8n
 
   cloudflared:
-    container_name: cloudflared
+    container_name: n8n-cloudflared
     image: cloudflare/cloudflared:latest
     networks:
       - n8n-network
