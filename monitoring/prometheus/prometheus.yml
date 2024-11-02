@@ -11,3 +11,9 @@ scrape_configs:
       - targets: ["192.168.2.121:9323"]
         labels:
           host: 'Docker (121)'
+
+  - job_name: "Traefik Cadvisor (192.168.2.122)"
+    static_configs:
+      - targets: ["192.168.2.122:9323"]
+        labels:
+          host: 'Traefik (122)'

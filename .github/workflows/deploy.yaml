@@ -16,6 +16,7 @@ jobs:
           - { host: '192.168.2.121', stack_name: 'n8n-cloudflared' }
           - { host: '192.168.2.121', stack_name: 'vaultwarden' }
           - { host: '192.168.2.121', stack_name: 'cadvisor' }
+          - { host: '192.168.2.122', stack_name: 'cadvisor' }
 
     env:
       DOCKER_HOST: tcp://${{ matrix.config.host }}:2375
