@@ -1,0 +1,13 @@
+global:
+  scrape_interval: 1m
+
+scrape_configs:
+  - job_name: 'Prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: "Docker Cadvisor (192.168.2.121)"
+    static_configs:
+      - targets: ["192.168.2.121:9323"]
+        labels:
+          host: 'Docker (121)'
