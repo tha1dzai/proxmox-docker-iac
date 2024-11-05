@@ -1,0 +1,31 @@
+name: deluge-gluetun
+services:
+  gluetun:
+    image: qmcgaw/gluetun:latest
+    container_name: gluetun
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    ports:
+      # expose deluge ports: https://github.com/linuxserver/docker-deluge
+      - 8112:8112
+      - 6881:6881
+      - 6881:6881/udp
+      - 58846:58846 #optional
+    environment:
+      - TZ=Europe/Berlin
+  deluge:
+    image: lscr.io/linuxserver/deluge:latest
+    container_name: deluge
+    network_mode: service:gluetun
+    depends_on:
+      - gluetun
+    environment:
+      - TZ=Europe/Berlin
+      - DELUGE_LOGLEVEL=error
+    volumes:
+      - /data/deluge/config:/config
+      - /data/deluge/downloads:/downloads
+    restart: unless-stopped

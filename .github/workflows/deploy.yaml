@@ -15,6 +15,7 @@ jobs:
           - { host: '192.168.2.121', stack_name: 'watchtower' }
           - { host: '192.168.2.121', stack_name: 'n8n-cloudflared' }
           - { host: '192.168.2.121', stack_name: 'vaultwarden' }
+          - { host: '192.168.2.121', stack_name: 'torrent' }
           - { host: '192.168.2.121', stack_name: 'cadvisor' }
           - { host: '192.168.2.122', stack_name: 'cadvisor' }
 
@@ -38,11 +39,14 @@ jobs:
         if: env.DOCKER_PROJECT_NAME == 'n8n-cloudflared'
         run: |
           echo "${{ secrets.N8N_SECRETS }}" >> $GITHUB_ENV
-
       - name: Inject secrets (vaultwarden)
         if: env.DOCKER_PROJECT_NAME == 'vaultwarden'
         run: |
           echo "${{ secrets.VAULTWARDEN_SECRETS }}" >> $GITHUB_ENV
+      - name: Inject secrets (torrent)
+        if: env.DOCKER_PROJECT_NAME == 'torrent'
+        run: |
+          echo "${{ secrets.TORRENT_SECRETS }}" >> $GITHUB_ENV
 
       - name: Deploy with Docker Compose
         run: |
