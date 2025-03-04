@@ -15,11 +15,11 @@ services:
     ports:
       - "5678:5678"
     environment:
-      - N8N_HOST=n8n.ehcan.me
+      - N8N_HOST=n8n.sunshine.me
       - N8N_PORT=5678
       - N8N_PROTOCOL=https
       - NODE_ENV=production
-      - WEBHOOK_URL=https://n8n.ehcan.me
+      - WEBHOOK_URL=https://n8n.sunshine.me
       - GENERIC_TIMEZONE=Europe/Berlin
       - N8N_DIAGNOSTICS_ENABLED=false
     volumes:
